@@ -253,6 +253,15 @@ h1{
 }
 .result-title .name{color:var(--brown);background:var(--gold);padding:0 8px;border-radius:6px}
 .result-desc{color:var(--muted);font-size:15px;margin-bottom:20px}
+.fallback-note{
+  display:inline-block;
+  margin:8px 0 4px;padding:8px 14px;
+  background:var(--cream);border:1.5px dashed var(--brown);
+  border-radius:50px;
+  font-size:13px;color:var(--brown-dark);
+  line-height:1.4;
+}
+.fallback-note b{color:var(--brown)}
 .result.found .result-title{color:var(--brown-dark)}
 .result.notfound .result-emoji{filter:grayscale(.3)}
 .season-badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:16px 0}
@@ -777,12 +786,27 @@ function searchName(raw){
 
   const inS1 = SET1.has(name);
   const inS2 = SET2.has(name);
+  if (inS1 || inS2){
+    return { name, inS1, inS2, found: true };
+  }
 
-  return {
-    name,
-    inS1, inS2,
-    found: inS1 || inS2
-  };
+  // 3글자 이상 + 원본 미발견 시 뒤 2글자(이름 부분)로 재검색
+  if (name.length >= 3){
+    const given = name.slice(-2);
+    const gS1 = SET1.has(given);
+    const gS2 = SET2.has(given);
+    if (gS1 || gS2){
+      return {
+        name: given,
+        originalName: name,
+        inS1: gS1, inS2: gS2,
+        found: true,
+        fallback: true
+      };
+    }
+  }
+
+  return { name, inS1: false, inS2: false, found: false };
 }
 
 // 비슷한 이름: 같은 첫 글자 또는 같은 초성
@@ -904,9 +928,13 @@ function renderResult(r){
   let html;
   if (found){
     const where = inS1 && inS2 ? "1탄과 2탄 모두" : (inS1 ? "1탄" : "2탄");
+    const fallbackNote = r.fallback
+      ? `<p class="fallback-note">💡 입력하신 <b>"${escape(r.originalName)}"</b>의 이름 부분 <b>"${escape(name)}"</b>(으)로 검색했어요</p>`
+      : "";
     html = `
       <div class="result-emoji">🎉</div>
       <div class="result-title">"<span class="name">${escape(name)}</span>" ${where}에 있어요!</div>
+      ${fallbackNote}
       <p class="result-desc">칸쵸 패키지에서 내 이름을 찾아 응모해보세요!</p>
       <div class="season-badges">${badges}</div>
     `;
