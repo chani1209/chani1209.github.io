@@ -6,14 +6,14 @@
 <meta name="theme-color" content="#8B4513">
 
 <title>칸쵸 이름 찾기 - 1탄 2탄 이름 검색 | 내 이름이 칸쵸에 있을까?</title>
-<meta name="description" content="롯데 칸쵸 '내 이름을 찾아라' 1탄(504개), 2탄(550개) 이름을 한 번에 검색! 내 이름이 칸쵸에 새겨져 있는지 바로 확인하세요.">
-<meta name="keywords" content="칸쵸 이름 찾기, 칸쵸 이름 검색, 칸쵸 이름 리스트, 칸쵸 내 이름을 찾아라, 칸쵸 2탄, 칸쵸 이름 명단, 칸쵸깡">
+<meta name="description" content="롯데 칸쵸 '내 이름을 찾아라' 이벤트 1탄·2탄 이름 1,000여 개를 즉시 검색! 내 이름이 칸쵸 과자에 새겨져 있는지 1초 만에 확인하고 응모하세요. 2026년 칸쵸깡 이벤트 응모 안내 포함.">
+<meta name="keywords" content="칸쵸 이름 찾기, 칸쵸 이름 검색, 칸쵸 이름 리스트, 칸쵸 내 이름을 찾아라, 칸쵸 2탄, 칸쵸 이름 명단, 칸쵸깡, 칸쵸 이벤트, 롯데 칸쵸, 내 이름 찾기, 칸쵸 응모, 칸쵸 이름 전체">
 <meta name="author" content="칸쵸 이름 찾기">
 <link rel="canonical" href="https://chani1209.github.io/">
 
 <!-- Open Graph -->
 <meta property="og:title" content="칸쵸 이름 찾기 🍪 내 이름이 있을까?">
-<meta property="og:description" content="1탄 504개 + 2탄 550개, 총 1,054개 이름 중 내 이름 검색!">
+<meta property="og:description" content="1탄 + 2탄 약 1,000개 이름 중 내 이름 검색! 1초 만에 칸쵸에 내 이름이 있는지 확인하세요.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://chani1209.github.io/">
 <meta property="og:image" content="https://chani1209.github.io/og-image.png">
@@ -22,7 +22,7 @@
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="칸쵸 이름 찾기 🍪 내 이름이 있을까?">
-<meta name="twitter:description" content="1탄 504개 + 2탄 550개, 총 1,054개 이름 중 내 이름 검색!">
+<meta name="twitter:description" content="1탄 + 2탄 약 1,000개 이름 중 내 이름 검색! 1초 만에 칸쵸에 내 이름이 있는지 확인하세요.">
 <meta name="twitter:image" content="https://chani1209.github.io/og-image.png">
 
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🍪%3C/text%3E%3C/svg%3E">
@@ -85,6 +85,22 @@
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "칸쵸 패키지 안 과자에 한 글자씩 새겨져 있으며, 패키지의 QR코드를 스캔해 응모할 수 있습니다."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "내 이름이 칸쵸 1탄에는 있는데 2탄에는 없나요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "이 사이트에서 이름을 검색하면 1탄과 2탄에 각각 있는지 동시에 확인할 수 있습니다. 일부 이름은 1탄과 2탄 양쪽에 모두 포함되어 있습니다."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "칸쵸 이름 찾기 이벤트 경품은 무엇인가요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "아이폰17, 마샬 스피커 등 다양한 상품이 경품으로 준비되어 있습니다. 자세한 내용은 롯데 칸쵸 공식 이벤트 페이지에서 확인하세요."
       }
     }
   ]
@@ -310,12 +326,17 @@ section{margin:32px 0}
 .top-empty{padding:32px;text-align:center;color:var(--muted)}
 
 /* List section (tabs) */
+.list-hint{
+  font-size:13px;color:var(--muted);
+  margin:-4px 0 12px;
+  display:flex;align-items:center;gap:6px;
+}
 .tabs{
   display:flex;gap:4px;
   background:var(--cream-dark);
   padding:4px;border-radius:50px;
   margin-bottom:16px;
-  max-width:340px;
+  max-width:380px;
 }
 .tab{
   flex:1;padding:10px 16px;
@@ -323,8 +344,20 @@ section{margin:32px 0}
   font-weight:700;font-size:14px;
   color:var(--muted);
   transition:all .2s;
+  display:flex;align-items:center;justify-content:center;gap:6px;
 }
 .tab.active{background:var(--brown);color:var(--white);box-shadow:var(--shadow)}
+.tab-badge{
+  font-size:10px;font-weight:800;
+  padding:2px 7px;border-radius:50px;
+  background:#FF4757;color:#fff;
+  letter-spacing:.3px;
+  animation:pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{transform:scale(1);opacity:1}
+  50%{transform:scale(1.08);opacity:.85}
+}
 
 .list-container{
   background:var(--white);border-radius:var(--radius);
@@ -400,6 +433,32 @@ section{margin:32px 0}
 .official-link .title{font-size:15px;display:block;margin-bottom:2px}
 .official-link .sub{font-size:12px;color:var(--brown);font-weight:600;opacity:.8}
 .official-link .arrow{font-size:20px;color:var(--brown)}
+
+/* FAQ */
+.faq{
+  background:var(--white);
+  border-radius:var(--radius);
+  border:2px solid var(--cream-dark);
+  overflow:hidden;
+}
+.faq-item{border-bottom:1px solid var(--cream-dark)}
+.faq-item:last-child{border-bottom:none}
+.faq-q{
+  width:100%;text-align:left;
+  padding:16px 20px;
+  font-weight:700;font-size:15px;
+  color:var(--brown-dark);
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+}
+.faq-q:hover{background:var(--cream)}
+.faq-q .arrow{font-size:13px;transition:transform .2s;color:var(--muted)}
+.faq-item.open .faq-q .arrow{transform:rotate(180deg)}
+.faq-a{
+  display:none;
+  padding:0 20px 18px;
+  color:var(--text);font-size:14px;line-height:1.65;
+}
+.faq-item.open .faq-a{display:block}
 
 /* Anchor ad (mobile bottom fixed) - 광고 코드 삽입 전엔 숨김 */
 .anchor-ad{display:none}
@@ -507,9 +566,10 @@ footer a{color:var(--brown);text-decoration:none;font-weight:600}
   <!-- 전체 이름 목록 -->
   <section aria-labelledby="listTitle">
     <h2 class="section-title" id="listTitle">📋 전체 이름 목록</h2>
+    <p class="list-hint">👇 자음을 눌러 이름을 펼쳐보세요. 이름을 클릭하면 바로 검색돼요!</p>
     <div class="tabs" role="tablist">
-      <button class="tab active" data-season="1" role="tab" aria-selected="true" id="tab1">1탄</button>
-      <button class="tab" data-season="2" role="tab" aria-selected="false" id="tab2">2탄</button>
+      <button class="tab" data-season="1" role="tab" aria-selected="false" id="tab1">1탄</button>
+      <button class="tab active" data-season="2" role="tab" aria-selected="true" id="tab2">2탄 <span class="tab-badge">진행중</span></button>
     </div>
     <div class="list-container" id="listContainer"></div>
   </section>
@@ -547,6 +607,48 @@ footer a{color:var(--brown);text-decoration:none;font-weight:600}
       </span>
       <span class="arrow" aria-hidden="true">→</span>
     </a>
+  </section>
+
+  <!-- FAQ -->
+  <section aria-labelledby="faqTitle">
+    <h2 class="section-title" id="faqTitle">❓ 자주 묻는 질문</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false">
+          <span>칸쵸 이름 찾기 2탄에 몇 개의 이름이 있나요?</span>
+          <span class="arrow">▼</span>
+        </button>
+        <div class="faq-a">2탄에는 총 550개의 이름이 새겨져 있습니다. 1탄에 없던 새로운 이름들이 다수 추가되었어요.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false">
+          <span>칸쵸 이름 이벤트 기간은 언제까지인가요?</span>
+          <span class="arrow">▼</span>
+        </button>
+        <div class="faq-a">2탄 이벤트는 2026년 4월 27일부터 6월 7일까지 진행됩니다. 자세한 이벤트 기간은 공식 페이지에서 확인하세요.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false">
+          <span>칸쵸 이름은 어디서 확인하나요?</span>
+          <span class="arrow">▼</span>
+        </button>
+        <div class="faq-a">칸쵸 패키지 안 과자에 한 글자씩 새겨져 있어요. 패키지 겉면의 QR코드를 스캔하면 공식 응모 페이지로 이동할 수 있습니다.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false">
+          <span>내 이름이 칸쵸 1탄에는 있는데 2탄에는 없나요?</span>
+          <span class="arrow">▼</span>
+        </button>
+        <div class="faq-a">이 사이트에서 이름을 검색하면 1탄과 2탄에 각각 있는지 동시에 확인할 수 있어요. 일부 이름은 양쪽에 모두 포함되어 있습니다.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false">
+          <span>칸쵸 이름 찾기 이벤트 경품은 무엇인가요?</span>
+          <span class="arrow">▼</span>
+        </button>
+        <div class="faq-a">아이폰17, 마샬 스피커 등 다양한 경품이 준비되어 있습니다. 자세한 내용은 페이지 위쪽 "공식 이벤트 페이지 바로가기" 버튼을 통해 확인하세요.</div>
+      </div>
+    </div>
   </section>
 
   <footer>
@@ -855,13 +957,17 @@ function renderList(season){
   }
 
   let html = "";
+  let firstNonEmpty = true;
   for (const cho of CHO_LIST){
     const arr = groups[cho];
     if (!arr.length) continue;
     arr.sort((a,b) => a.localeCompare(b, "ko"));
+    const openClass = firstNonEmpty ? " open" : "";
+    const ariaExpanded = firstNonEmpty ? "true" : "false";
+    firstNonEmpty = false;
     html += `
-      <div class="cho-group" data-cho="${cho}">
-        <button class="cho-header" type="button" aria-expanded="false">
+      <div class="cho-group${openClass}" data-cho="${cho}">
+        <button class="cho-header" type="button" aria-expanded="${ariaExpanded}">
           <span>${cho} <span style="color:var(--muted);font-weight:600;font-size:13px">(${arr.length})</span></span>
           <span class="arrow">▼</span>
         </button>
@@ -1000,6 +1106,14 @@ document.querySelectorAll(".tab").forEach(t => {
   });
 });
 
+document.querySelectorAll(".faq-q").forEach(q => {
+  q.addEventListener("click", () => {
+    const item = q.closest(".faq-item");
+    const open = item.classList.toggle("open");
+    q.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+});
+
 document.getElementById("anchorClose").addEventListener("click", () => {
   document.getElementById("anchorAd").style.display = "none";
   document.body.style.paddingBottom = "0";
@@ -1024,8 +1138,8 @@ try {
 document.getElementById("tab1").textContent = `1탄 (${SEASON1_NAMES.length}개)`;
 document.getElementById("tab2").textContent = `2탄 (${SEASON2_NAMES.length}개)`;
 
-// 시작
-renderList(1);
+// 시작 - 2탄(현재 진행중)을 먼저 표시
+renderList(2);
 subscribeTotalCount();
 loadTopSearches();
 </script>
