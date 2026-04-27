@@ -262,6 +262,24 @@ h1{
   line-height:1.4;
 }
 .fallback-note b{color:var(--brown)}
+.search-count{
+  display:inline-flex;align-items:center;gap:6px;
+  margin:6px 0 4px;padding:7px 16px;
+  background:var(--cream-dark);
+  border-radius:50px;
+  font-size:13px;font-weight:700;
+  color:var(--brown-dark);
+  letter-spacing:-.2px;
+}
+.search-count .num{
+  color:var(--brown);font-size:15px;font-weight:900;
+}
+.search-count.loaded{animation:countPop .35s cubic-bezier(.34,1.56,.64,1)}
+@keyframes countPop{
+  0%{transform:scale(.85);opacity:0}
+  100%{transform:scale(1);opacity:1}
+}
+.search-count.loading{opacity:.6}
 .result.found .result-title{color:var(--brown-dark)}
 .result.notfound .result-emoji{filter:grayscale(.3)}
 .season-badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:16px 0}
@@ -851,18 +869,36 @@ function shuffle(arr){
 }
 
 // ============================================================
-// Firebase: 카운트 증가
+// Firebase: 카운트 증가 + 표시
 // ============================================================
 async function incrementSearchCount(name){
   if (!firebaseEnabled || !db) return;
-  if (sessionSearched.has(name)) return; // 같은 이름 중복 차단
-  sessionSearched.add(name);
 
+  let newCount = null;
   try {
-    await runTransaction(ref(db, `search_counts/${name}`), (cur) => (cur || 0) + 1);
-    await runTransaction(ref(db, `total_searches`), (cur) => (cur || 0) + 1);
+    if (sessionSearched.has(name)){
+      // 세션 내 중복 - 읽기만
+      const snap = await get(ref(db, `search_counts/${name}`));
+      newCount = snap.val() || 0;
+    } else {
+      sessionSearched.add(name);
+      const result = await runTransaction(ref(db, `search_counts/${name}`), (cur) => (cur || 0) + 1);
+      newCount = result.snapshot.val();
+      runTransaction(ref(db, `total_searches`), (cur) => (cur || 0) + 1).catch(() => {});
+    }
   } catch (e) {
-    console.warn("카운트 증가 실패", e);
+    console.warn("카운트 처리 실패", e);
+    return;
+  }
+
+  // 결과 영역의 카운트 배지 업데이트
+  const el = document.getElementById("searchCount");
+  if (el && newCount != null){
+    const formatted = newCount.toLocaleString("ko-KR");
+    const ordinal = newCount === 1 ? "첫 번째 검색이에요!" : `<span class="num">${formatted}</span>번 검색된 이름이에요`;
+    el.innerHTML = `🔍 ${ordinal}`;
+    el.classList.remove("loading");
+    el.classList.add("loaded");
   }
 }
 
@@ -944,6 +980,9 @@ function renderResult(r){
   badges += `<span class="badge s2 ${inS2 ? "active" : ""}">2탄 ${inS2 ? "✓" : "✗"}</span>`;
 
   let html;
+  const countBadge = firebaseEnabled
+    ? `<div class="search-count loading" id="searchCount" aria-live="polite">🔍 검색 횟수 불러오는 중...</div>`
+    : "";
   if (found){
     const where = inS1 && inS2 ? "1탄과 2탄 모두" : (inS1 ? "1탄" : "2탄");
     const fallbackNote = r.fallback
@@ -953,6 +992,7 @@ function renderResult(r){
       <div class="result-emoji">🎉</div>
       <div class="result-title">"<span class="name">${escape(name)}</span>" ${where}에 있어요!</div>
       ${fallbackNote}
+      ${countBadge}
       <p class="result-desc">칸쵸 패키지에서 내 이름을 찾아 응모해보세요!</p>
       <div class="season-badges">${badges}</div>
     `;
@@ -960,6 +1000,7 @@ function renderResult(r){
     html = `
       <div class="result-emoji">😢</div>
       <div class="result-title">아쉽지만 "<span class="name">${escape(name)}</span>"은 없어요</div>
+      ${countBadge}
       <p class="result-desc">1탄 ${SEASON1_NAMES.length}개, 2탄 ${SEASON2_NAMES.length}개 중에 없는 이름이에요.<br>아래 비슷한 이름은 어떠세요?</p>
       <div class="season-badges">${badges}</div>
     `;
