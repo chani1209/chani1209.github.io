@@ -434,6 +434,31 @@ section{margin:32px 0}
 .official-link .sub{font-size:12px;color:var(--brown);font-weight:600;opacity:.8}
 .official-link .arrow{font-size:20px;color:var(--brown)}
 
+.buy-link{
+  display:flex;align-items:center;gap:14px;
+  margin-top:10px;padding:16px 20px;
+  background:linear-gradient(135deg,#FFF8DC 0%,#F5EBC8 100%);
+  border:2px solid var(--brown);
+  border-radius:var(--radius-sm);
+  color:var(--brown-dark);
+  text-decoration:none;
+  font-weight:700;
+  transition:transform .15s,box-shadow .15s;
+}
+.buy-link:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.buy-link .ico{font-size:30px;line-height:1}
+.buy-link .txt{flex:1}
+.buy-link .title{font-size:14px;display:block;margin-bottom:2px}
+.buy-link .sub{font-size:11px;color:var(--muted);font-weight:600;line-height:1.45}
+.buy-link .arrow{font-size:18px;color:var(--brown)}
+.buy-notice{
+  margin-top:14px;padding:12px 14px;
+  background:#FFF4E1;border:1.5px dashed #D2691E;
+  border-radius:10px;
+  font-size:13px;line-height:1.5;color:var(--brown-dark);
+}
+.buy-notice strong{color:#D2691E}
+
 /* FAQ */
 .faq{
   background:var(--white);
@@ -607,6 +632,20 @@ footer a{color:var(--brown);text-decoration:none;font-weight:600}
       </span>
       <span class="arrow" aria-hidden="true">→</span>
     </a>
+
+    <a class="buy-link" href="https://kko.to/7A-2-pxGCG" target="_blank" rel="noopener" aria-label="칸쵸 구매하기">
+      <span class="ico" aria-hidden="true">🛒</span>
+      <span class="txt">
+        <span class="title">칸쵸 구매하러 가기</span>
+        <span class="sub">카카오톡 쇼핑 링크 · 제휴 링크 아님</span>
+      </span>
+      <span class="arrow" aria-hidden="true">→</span>
+    </a>
+
+    <p class="buy-notice">
+      ⚠️ <strong>구매 전 꼭 확인하세요!</strong><br>
+      위 검색 결과가 <strong>2탄</strong>에 있는지 확인 후 구매하시는 것을 추천드려요. 1탄과 2탄은 패키지에 새겨진 이름이 다릅니다.
+    </p>
   </section>
 
   <!-- FAQ -->
