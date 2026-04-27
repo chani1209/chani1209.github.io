@@ -1037,8 +1037,9 @@ function renderList(season){
 // ============================================================
 // 공유
 // ============================================================
+const SITE_URL = "https://chani1209.github.io/";
 function handleShare(type, r){
-  const url = location.href.split("?")[0] + `?n=${encodeURIComponent(r.name)}`;
+  const url = `${SITE_URL}?n=${encodeURIComponent(r.name)}`;
   const where = r.inS1 && r.inS2 ? "1탄과 2탄 모두" : (r.inS1 ? "1탄" : (r.inS2 ? "2탄" : ""));
   const text = r.found
     ? `🎉 "${r.name}"은 칸쵸 ${where}에 있어요! #칸쵸이름찾기`
