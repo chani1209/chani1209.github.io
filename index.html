@@ -382,6 +382,25 @@ section{margin:32px 0}
 }
 .event-info dd{color:var(--text);font-size:15px;line-height:1.55}
 
+.official-link{
+  display:flex;align-items:center;gap:14px;
+  margin-top:20px;padding:16px 20px;
+  background:linear-gradient(135deg,#FFE89C 0%,var(--gold) 100%);
+  border:2px solid var(--brown);
+  border-radius:var(--radius-sm);
+  color:var(--brown-dark);
+  text-decoration:none;
+  font-weight:700;
+  transition:transform .15s,box-shadow .15s;
+  box-shadow:var(--shadow);
+}
+.official-link:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.official-link .ico{font-size:32px;line-height:1}
+.official-link .txt{flex:1}
+.official-link .title{font-size:15px;display:block;margin-bottom:2px}
+.official-link .sub{font-size:12px;color:var(--brown);font-weight:600;opacity:.8}
+.official-link .arrow{font-size:20px;color:var(--brown)}
+
 /* Anchor ad (mobile bottom fixed) - 광고 코드 삽입 전엔 숨김 */
 .anchor-ad{display:none}
 .anchor-ad.has-ad{
@@ -519,6 +538,15 @@ footer a{color:var(--brown);text-decoration:none;font-weight:600}
         <dd>1탄은 504개, 2탄은 550개의 새로운 이름이 추가되어 총 1,054개의 이름을 만나볼 수 있어요.</dd>
       </div>
     </dl>
+
+    <a class="official-link" href="https://www.kancho-name-event.co.kr/" target="_blank" rel="noopener" aria-label="롯데 칸쵸 공식 이벤트 페이지로 이동">
+      <span class="ico" aria-hidden="true">🎁</span>
+      <span class="txt">
+        <span class="title">롯데 칸쵸 공식 이벤트 페이지</span>
+        <span class="sub">응모하러 가기 · kancho-name-event.co.kr</span>
+      </span>
+      <span class="arrow" aria-hidden="true">→</span>
+    </a>
   </section>
 
   <footer>
