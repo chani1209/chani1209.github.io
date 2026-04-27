@@ -280,6 +280,35 @@ h1{
   100%{transform:scale(1);opacity:1}
 }
 .search-count.loading{opacity:.6}
+
+/* 잘못된 입력 결과 */
+.result.invalid{border-color:#FFB347;background:#FFF8E1}
+.result.invalid .result-title{color:#B8650F}
+
+/* 관리자 패널 */
+.admin-panel{
+  position:fixed;top:12px;right:12px;
+  background:#fff;border:2px solid var(--brown);
+  border-radius:12px;padding:14px 16px;
+  box-shadow:var(--shadow-lg);
+  z-index:300;font-size:13px;
+  max-width:280px;
+}
+.admin-panel h3{font-size:14px;margin-bottom:10px;color:var(--brown-dark)}
+.admin-panel button{
+  display:block;width:100%;
+  padding:8px 12px;margin-bottom:6px;
+  background:var(--brown);color:#fff;
+  border-radius:6px;font-weight:600;font-size:13px;
+}
+.admin-panel button:hover{background:var(--brown-dark)}
+.admin-panel button.secondary{background:#999}
+.admin-panel .out{
+  margin-top:8px;padding:8px;background:#f5f5f5;
+  border-radius:6px;font-size:12px;
+  white-space:pre-wrap;word-break:break-all;
+  max-height:200px;overflow-y:auto;
+}
 .result.found .result-title{color:var(--brown-dark)}
 .result.notfound .result-emoji{filter:grayscale(.3)}
 .season-badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:16px 0}
@@ -807,11 +836,43 @@ function getFirstCho(name){
 }
 
 // ============================================================
-// 검색 어뷰징 방지
+// 입력 검증 + 어뷰징 방지
 // ============================================================
-const sessionSearched = new Set(); // 이번 세션에 카운트된 이름
+// 한글 1~4글자만 허용 (영문/특수문자/너무 긴 이름 차단)
+const NAME_REGEX = /^[가-힣]{1,4}$/;
+
 let lastSearchTime = 0;
 const MIN_INTERVAL = 1000; // 1초
+
+// 영구 레이트리밋 (localStorage 기반 - 새로고침/탭 이동에도 유지)
+const RATE_KEY = "kancho_rate_v1";
+const COOLDOWN_MS = 24 * 60 * 60 * 1000; // 같은 이름 24시간 쿨타임
+const DAILY_LIMIT = 50;                  // 브라우저당 1일 50개 이름까지 카운트
+
+function getRateState(){
+  try { return JSON.parse(localStorage.getItem(RATE_KEY)) || { day: "", count: 0, names: {} }; }
+  catch { return { day: "", count: 0, names: {} }; }
+}
+function saveRateState(s){
+  try { localStorage.setItem(RATE_KEY, JSON.stringify(s)); } catch {}
+}
+function canIncrement(name){
+  const s = getRateState();
+  const today = new Date().toISOString().slice(0,10);
+  if (s.day !== today){ s.day = today; s.count = 0; s.names = {}; saveRateState(s); }
+  const last = s.names[name];
+  if (last && Date.now() - last < COOLDOWN_MS) return false;
+  if (s.count >= DAILY_LIMIT) return false;
+  return true;
+}
+function recordIncrement(name){
+  const s = getRateState();
+  const today = new Date().toISOString().slice(0,10);
+  if (s.day !== today){ s.day = today; s.count = 0; s.names = {}; }
+  s.names[name] = Date.now();
+  s.count++;
+  saveRateState(s);
+}
 
 // ============================================================
 // 검색 핵심 로직
@@ -820,13 +881,25 @@ function searchName(raw){
   const name = raw.trim();
   if (!name) return null;
 
+  // 1차: 입력 검증 (한글 1~4글자만 허용)
+  if (!NAME_REGEX.test(name)){
+    // 풀네임(3~4자 한글)은 아래 폴백 로직에서 처리되므로 여기선 실제 잘못된 입력만 차단
+    // 한글이지만 5자 이상이거나 한글 아닌 문자가 포함되면 invalid
+    return {
+      name,
+      invalid: true,
+      reason: name.length > 4 ? "tooLong" : "notKorean",
+      found: false, inS1: false, inS2: false
+    };
+  }
+
   const inS1 = SET1.has(name);
   const inS2 = SET2.has(name);
   if (inS1 || inS2){
     return { name, inS1, inS2, found: true };
   }
 
-  // 3글자 이상 + 원본 미발견 시 뒤 2글자(이름 부분)로 재검색
+  // 3~4글자 + 원본 미발견 시 뒤 2글자(이름 부분)로 재검색 (풀네임 대응)
   if (name.length >= 3){
     const given = name.slice(-2);
     const gS1 = SET1.has(given);
@@ -874,17 +947,20 @@ function shuffle(arr){
 async function incrementSearchCount(name){
   if (!firebaseEnabled || !db) return;
 
+  // 추가 안전장치: 한글 1~4글자가 아니면 절대 DB에 쓰지 않음
+  if (!NAME_REGEX.test(name)) return;
+
   let newCount = null;
   try {
-    if (sessionSearched.has(name)){
-      // 세션 내 중복 - 읽기만
+    if (!canIncrement(name)){
+      // 쿨타임/일일 한도 - 읽기만
       const snap = await get(ref(db, `search_counts/${name}`));
       newCount = snap.val() || 0;
     } else {
-      sessionSearched.add(name);
       const result = await runTransaction(ref(db, `search_counts/${name}`), (cur) => (cur || 0) + 1);
       newCount = result.snapshot.val();
       runTransaction(ref(db, `total_searches`), (cur) => (cur || 0) + 1).catch(() => {});
+      recordIncrement(name);
     }
   } catch (e) {
     console.warn("카운트 처리 실패", e);
@@ -968,6 +1044,21 @@ function renderResult(r){
   const adAfter = document.getElementById("adAfterResult");
   if (!r){
     el.classList.remove("show");
+    adAfter.style.display = "none";
+    return;
+  }
+
+  // 잘못된 입력 처리 (영문/특수문자/너무 긴 이름)
+  if (r.invalid){
+    const msg = r.reason === "tooLong"
+      ? "이름은 1~4글자까지 입력할 수 있어요"
+      : "한글로만 입력해주세요";
+    el.className = "result show invalid";
+    el.innerHTML = `
+      <div class="result-emoji">⚠️</div>
+      <div class="result-title">${escape(msg)}</div>
+      <p class="result-desc">예: 서준, 하윤, 강민<br>(영문, 숫자, 특수문자는 검색할 수 없어요)</p>
+    `;
     adAfter.style.display = "none";
     return;
   }
@@ -1207,6 +1298,10 @@ function doSearch(){
       return;
     }
     renderResult(r);
+
+    // 잘못된 입력은 카운트하지 않음 (DB 보호)
+    if (r.invalid) return;
+
     incrementSearchCount(r.name);
     if (window.gtag) gtag("event", "search", { search_term: r.name, found: r.found });
 
@@ -1266,6 +1361,58 @@ const initialName = params.get("n");
 if (initialName){
   document.getElementById("searchInput").value = initialName;
   setTimeout(doSearch, 200);
+}
+
+// 관리자 모드: ?admin=kancho-admin-2026
+// (URL 변경하려면 아래 ADMIN_KEY 수정)
+const ADMIN_KEY = "kancho-admin-2026";
+if (params.get("admin") === ADMIN_KEY && firebaseEnabled){
+  setupAdminPanel();
+}
+
+function setupAdminPanel(){
+  const panel = document.createElement("div");
+  panel.className = "admin-panel";
+  panel.innerHTML = `
+    <h3>🔧 관리자 모드</h3>
+    <button id="btnRecalc">총 카운트 재계산</button>
+    <button id="btnListAll">전체 이름 카운트 보기</button>
+    <button class="secondary" id="btnClose">닫기</button>
+    <div class="out" id="adminOut" hidden></div>
+  `;
+  document.body.appendChild(panel);
+
+  const out = panel.querySelector("#adminOut");
+  const showOut = (txt) => { out.hidden = false; out.textContent = txt; };
+
+  panel.querySelector("#btnClose").addEventListener("click", () => panel.remove());
+
+  panel.querySelector("#btnRecalc").addEventListener("click", async () => {
+    showOut("계산 중...");
+    try {
+      const snap = await get(ref(db, "search_counts"));
+      let total = 0, items = 0;
+      snap.forEach(c => { total += (c.val() || 0); items++; });
+      await runTransaction(ref(db, "total_searches"), () => total);
+      showOut(`✅ 완료\n이름 ${items}개, 총 검색 ${total.toLocaleString("ko-KR")}회로 동기화됨`);
+    } catch(e){
+      showOut(`❌ 오류: ${e.message}`);
+    }
+  });
+
+  panel.querySelector("#btnListAll").addEventListener("click", async () => {
+    showOut("불러오는 중...");
+    try {
+      const snap = await get(ref(db, "search_counts"));
+      const arr = [];
+      snap.forEach(c => arr.push([c.key, c.val() || 0]));
+      arr.sort((a,b) => b[1] - a[1]);
+      const txt = arr.map(([n,v]) => `${n}: ${v}`).join("\n");
+      showOut(`총 ${arr.length}개\n\n${txt || "(데이터 없음)"}`);
+    } catch(e){
+      showOut(`❌ 오류: ${e.message}`);
+    }
+  });
 }
 
 // AdSense push (placeholder, 승인 후 활성화)
