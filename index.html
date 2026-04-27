@@ -285,30 +285,6 @@ h1{
 .result.invalid{border-color:#FFB347;background:#FFF8E1}
 .result.invalid .result-title{color:#B8650F}
 
-/* 관리자 패널 */
-.admin-panel{
-  position:fixed;top:12px;right:12px;
-  background:#fff;border:2px solid var(--brown);
-  border-radius:12px;padding:14px 16px;
-  box-shadow:var(--shadow-lg);
-  z-index:300;font-size:13px;
-  max-width:280px;
-}
-.admin-panel h3{font-size:14px;margin-bottom:10px;color:var(--brown-dark)}
-.admin-panel button{
-  display:block;width:100%;
-  padding:8px 12px;margin-bottom:6px;
-  background:var(--brown);color:#fff;
-  border-radius:6px;font-weight:600;font-size:13px;
-}
-.admin-panel button:hover{background:var(--brown-dark)}
-.admin-panel button.secondary{background:#999}
-.admin-panel .out{
-  margin-top:8px;padding:8px;background:#f5f5f5;
-  border-radius:6px;font-size:12px;
-  white-space:pre-wrap;word-break:break-all;
-  max-height:200px;overflow-y:auto;
-}
 .result.found .result-title{color:var(--brown-dark)}
 .result.notfound .result-emoji{filter:grayscale(.3)}
 .season-badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:16px 0}
@@ -785,7 +761,7 @@ footer a{color:var(--brown);text-decoration:none;font-weight:600}
 // ============================================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {
-  getDatabase, ref, runTransaction, onValue, query,
+  getDatabase, ref, runTransaction, query,
   orderByValue, limitToLast, get
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js";
 
@@ -959,7 +935,6 @@ async function incrementSearchCount(name){
     } else {
       const result = await runTransaction(ref(db, `search_counts/${name}`), (cur) => (cur || 0) + 1);
       newCount = result.snapshot.val();
-      runTransaction(ref(db, `total_searches`), (cur) => (cur || 0) + 1).catch(() => {});
       recordIncrement(name);
     }
   } catch (e) {
@@ -1016,23 +991,44 @@ async function loadTopSearches(){
 }
 
 // ============================================================
-// Firebase: 전체 카운터
+// Firebase: 전체 카운터 (search_counts 합으로 동적 계산)
+// - 별도의 total_searches 노드를 두지 않으므로,
+//   관리자가 콘솔에서 스팸 항목을 지우면 자동으로 동기화됨
+// - 5분 캐시로 부하 최소화
 // ============================================================
-function subscribeTotalCount(){
+const TOTAL_CACHE_KEY = "kancho_total_v1";
+const TOTAL_CACHE_TTL = 5 * 60 * 1000;
+
+function setTotalText(v){
   const el = document.getElementById("totalCount");
+  if (el) el.textContent = (v || 0).toLocaleString("ko-KR");
+}
+
+async function subscribeTotalCount(){
+  // 캐시 우선 표시
+  try {
+    const cached = JSON.parse(localStorage.getItem(TOTAL_CACHE_KEY) || "null");
+    if (cached && typeof cached.v === "number"){
+      setTotalText(cached.v);
+      if (Date.now() - cached.t < TOTAL_CACHE_TTL) return;
+    }
+  } catch(e){}
 
   if (!firebaseEnabled || !db){
-    el.textContent = "0";
+    setTotalText(0);
     return;
   }
 
   try {
-    onValue(ref(db, "total_searches"), (snap) => {
-      const v = snap.val() || 0;
-      el.textContent = v.toLocaleString("ko-KR");
-    }, () => { el.textContent = "0"; });
+    const snap = await get(ref(db, "search_counts"));
+    let total = 0;
+    snap.forEach(c => { total += (c.val() || 0); });
+    setTotalText(total);
+    localStorage.setItem(TOTAL_CACHE_KEY, JSON.stringify({ t: Date.now(), v: total }));
   } catch(e){
-    el.textContent = "0";
+    console.warn("총 카운트 로드 실패", e);
+    // 캐시가 있었다면 그대로 두고, 없으면 0
+    if (!localStorage.getItem(TOTAL_CACHE_KEY)) setTotalText(0);
   }
 }
 
@@ -1361,58 +1357,6 @@ const initialName = params.get("n");
 if (initialName){
   document.getElementById("searchInput").value = initialName;
   setTimeout(doSearch, 200);
-}
-
-// 관리자 모드: ?admin=kancho-admin-2026
-// (URL 변경하려면 아래 ADMIN_KEY 수정)
-const ADMIN_KEY = "kancho-admin-2026";
-if (params.get("admin") === ADMIN_KEY && firebaseEnabled){
-  setupAdminPanel();
-}
-
-function setupAdminPanel(){
-  const panel = document.createElement("div");
-  panel.className = "admin-panel";
-  panel.innerHTML = `
-    <h3>🔧 관리자 모드</h3>
-    <button id="btnRecalc">총 카운트 재계산</button>
-    <button id="btnListAll">전체 이름 카운트 보기</button>
-    <button class="secondary" id="btnClose">닫기</button>
-    <div class="out" id="adminOut" hidden></div>
-  `;
-  document.body.appendChild(panel);
-
-  const out = panel.querySelector("#adminOut");
-  const showOut = (txt) => { out.hidden = false; out.textContent = txt; };
-
-  panel.querySelector("#btnClose").addEventListener("click", () => panel.remove());
-
-  panel.querySelector("#btnRecalc").addEventListener("click", async () => {
-    showOut("계산 중...");
-    try {
-      const snap = await get(ref(db, "search_counts"));
-      let total = 0, items = 0;
-      snap.forEach(c => { total += (c.val() || 0); items++; });
-      await runTransaction(ref(db, "total_searches"), () => total);
-      showOut(`✅ 완료\n이름 ${items}개, 총 검색 ${total.toLocaleString("ko-KR")}회로 동기화됨`);
-    } catch(e){
-      showOut(`❌ 오류: ${e.message}`);
-    }
-  });
-
-  panel.querySelector("#btnListAll").addEventListener("click", async () => {
-    showOut("불러오는 중...");
-    try {
-      const snap = await get(ref(db, "search_counts"));
-      const arr = [];
-      snap.forEach(c => arr.push([c.key, c.val() || 0]));
-      arr.sort((a,b) => b[1] - a[1]);
-      const txt = arr.map(([n,v]) => `${n}: ${v}`).join("\n");
-      showOut(`총 ${arr.length}개\n\n${txt || "(데이터 없음)"}`);
-    } catch(e){
-      showOut(`❌ 오류: ${e.message}`);
-    }
-  });
 }
 
 // AdSense push (placeholder, 승인 후 활성화)
