@@ -153,6 +153,8 @@ input{font-family:inherit}
   display:flex;align-items:center;justify-content:center;
   margin:20px 0;min-height:100px;
 }
+.ad-slot.ad-kakao.size-300x250{min-height:260px}
+.ad-slot.ad-kakao.size-320x50{min-height:50px;margin:8px 0}
 .ad-slot.ad-kakao .kakao_ad_area{max-width:100%}
 
 /* Header / Hero */
@@ -540,19 +542,27 @@ section{margin:32px 0}
 }
 .faq-item.open .faq-a{display:block}
 
-/* Anchor ad (mobile bottom fixed) - 광고 코드 삽입 전엔 숨김 */
-.anchor-ad{display:none}
-.anchor-ad.has-ad{
+/* Anchor ad (mobile bottom fixed) */
+.anchor-ad{
   display:block;
   position:fixed;bottom:0;left:0;right:0;
   z-index:100;
   background:var(--white);
   border-top:2px solid var(--cream-dark);
-  padding:8px;
+  padding:8px 8px 6px;
   text-align:center;
   box-shadow:0 -4px 20px rgba(0,0,0,.08);
 }
-.anchor-ad .ad-slot{margin:0;min-height:60px;font-size:12px}
+.anchor-ad.hidden{display:none}
+.anchor-ad .ad-slot{margin:0;min-height:50px;font-size:12px}
+/* 모바일에서 앵커 광고가 콘텐츠를 가리지 않도록 본문 하단 여유 확보 */
+@media (max-width: 767px){
+  body{padding-bottom:72px}
+}
+/* 데스크톱에서는 앵커 광고 숨김(모바일 전용) */
+@media (min-width: 768px){
+  .anchor-ad{display:none}
+}
 .anchor-close{
   position:absolute;top:4px;right:4px;
   width:24px;height:24px;border-radius:50%;
@@ -637,8 +647,13 @@ footer a{color:var(--brown);text-decoration:none;font-weight:600}
   <!-- 검색 결과 -->
   <div class="result" id="result" role="region" aria-live="polite"></div>
 
-  <!-- 검색 결과 하단 광고 -->
-  <div class="ad-slot" id="adAfterResult" style="display:none" aria-label="광고"></div>
+  <!-- 검색 결과 하단 광고 (카카오 애드핏 300x250) -->
+  <div class="ad-slot ad-kakao size-300x250" id="adAfterResult" style="display:none" aria-label="광고">
+    <ins class="kakao_ad_area" style="display:none;"
+      data-ad-unit="DAN-OgWTWQiwtw3GIyhh"
+      data-ad-width="300"
+      data-ad-height="250"></ins>
+  </div>
 
   <!-- 실시간 인기 검색어 -->
   <section aria-labelledby="topTitle">
@@ -663,8 +678,13 @@ footer a{color:var(--brown);text-decoration:none;font-weight:600}
     <div class="list-container" id="listContainer"></div>
   </section>
 
-  <!-- 목록 중간 광고 -->
-  <div class="ad-slot" aria-label="광고"></div>
+  <!-- 목록 중간 광고 (카카오 애드핏 300x250) -->
+  <div class="ad-slot ad-kakao size-300x250" aria-label="광고">
+    <ins class="kakao_ad_area" style="display:none;"
+      data-ad-unit="DAN-asS7Gq5tB0zBcIym"
+      data-ad-width="300"
+      data-ad-height="250"></ins>
+  </div>
 
   <!-- 이벤트 정보 -->
   <section class="event-info" aria-labelledby="eventTitle">
@@ -760,10 +780,15 @@ footer a{color:var(--brown);text-decoration:none;font-weight:600}
   </footer>
 </main>
 
-<!-- 모바일 앵커 광고 -->
+<!-- 모바일 앵커 광고 (카카오 애드핏 320x50) -->
 <div class="anchor-ad" id="anchorAd">
   <button class="anchor-close" id="anchorClose" aria-label="광고 닫기">×</button>
-  <div class="ad-slot" aria-label="앵커 광고"></div>
+  <div class="ad-slot ad-kakao size-320x50" aria-label="앵커 광고">
+    <ins class="kakao_ad_area" style="display:none;"
+      data-ad-unit="DAN-BYsY4PHvTt986PjV"
+      data-ad-width="320"
+      data-ad-height="50"></ins>
+  </div>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
