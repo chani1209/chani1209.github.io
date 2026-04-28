@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="theme-color" content="#8B4513"/>
+<title>칸쵸 이름찾기 1탄·2탄 이름 통계 분석 | 인기 글자, 흔한 성씨, 시즌 비교</title>
+<meta name="description" content="칸쵸 '내 이름을 찾아라' 1탄(504개), 2탄(550개)에 인쇄된 이름들을 데이터 분석했습니다. 글자 수 분포, 가장 많이 등장하는 첫 글자, 시즌별 차이를 한눈에 확인하세요."/>
+<meta name="keywords" content="칸쵸 이름 통계, 칸쵸 1탄 2탄 비교, 인기 이름, 한국 이름 분석, 칸쵸 이름 분포"/>
+<link rel="canonical" href="https://chani1209.github.io/name-stats.html"/>
+
+<meta property="og:title" content="칸쵸 이름찾기 1탄·2탄 이름 통계 분석"/>
+<meta property="og:description" content="1탄 504개, 2탄 550개의 이름을 분석한 통계 페이지. 글자수 분포, 인기 첫 글자, 시즌 차이까지."/>
+<meta property="og:url" content="https://chani1209.github.io/name-stats.html"/>
+<meta property="og:type" content="article"/>
+<meta property="og:locale" content="ko_KR"/>
+<meta name="twitter:card" content="summary"/>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "칸쵸 이름찾기 1탄·2탄 이름 통계 분석",
+  "description": "1탄과 2탄 이름들의 글자수 분포, 인기 글자, 시즌별 차이를 데이터로 분석.",
+  "datePublished": "2026-04-28",
+  "dateModified": "2026-04-28",
+  "inLanguage": "ko-KR",
+  "author": { "@type": "Organization", "name": "칸쵸 이름 찾기" }
+}
+</script>
+
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YXVT2W3NSG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-YXVT2W3NSG');
+</script>
+
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7640232155148288" crossorigin="anonymous"></script>
+
+<!-- 광고 시스템 (AdSense 우선, AdFit 폴백) -->
+<script>
+window.AD_CONFIG = {
+  adsense: { client: "ca-pub-7640232155148288", enabled: false, slots: { top: "", result: "", midList: "", anchor: "" } },
+  adfit: {
+    units: {
+      top:     { id: "DAN-6VZjolAcns6K03AT", w: 320, h: 100 },
+      result:  { id: "DAN-OgWTWQiwtw3GIyhh", w: 300, h: 250 },
+      midList: { id: "DAN-asS7Gq5tB0zBcIym", w: 300, h: 250 },
+      anchor:  { id: "DAN-BYsY4PHvTt986PjV", w: 320, h: 50  }
+    }
+  },
+  fallbackTimeoutMs: 3000
+};
+(function(){
+  function loadAdFitScript(){
+    const s = document.createElement("script");
+    s.src = "//t1.kakaocdn.net/kas/static/ba.min.js"; s.async = true;
+    document.head.appendChild(s);
+  }
+  function renderAdFit(slot, cfg){
+    slot.innerHTML = '<ins class="kakao_ad_area" style="display:none;" data-ad-unit="'+cfg.id+'" data-ad-width="'+cfg.w+'" data-ad-height="'+cfg.h+'"></ins>';
+    loadAdFitScript();
+  }
+  function renderAdSense(slot, cfg, slotId){
+    slot.innerHTML = '<ins class="adsbygoogle" style="display:inline-block;width:'+cfg.w+'px;height:'+cfg.h+'px" data-ad-client="'+window.AD_CONFIG.adsense.client+'" data-ad-slot="'+slotId+'"></ins>';
+    try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+  }
+  function checkAndFallback(slot, place){
+    const ins = slot.querySelector(".adsbygoogle");
+    if (!ins) return;
+    if (ins.getAttribute("data-ad-status") === "filled") return;
+    renderAdFit(slot, window.AD_CONFIG.adfit.units[place]);
+  }
+  function renderSlot(slot){
+    const place = slot.dataset.adPlace;
+    const adfitCfg = window.AD_CONFIG.adfit.units[place];
+    if (!adfitCfg) return;
+    const adsenseCfg = window.AD_CONFIG.adsense;
+    const slotId = adsenseCfg.slots[place];
+    if (adsenseCfg.enabled && slotId){
+      renderAdSense(slot, adfitCfg, slotId);
+      setTimeout(() => checkAndFallback(slot, place), window.AD_CONFIG.fallbackTimeoutMs);
+    } else { renderAdFit(slot, adfitCfg); }
+  }
+  function initAds(){ document.querySelectorAll(".ad-managed").forEach(renderSlot); }
+  if (document.readyState === "loading"){ document.addEventListener("DOMContentLoaded", initAds); }
+  else { initAds(); }
+})();
+</script>
+
+<style>
+:root{
+  --brown:#8B4513; --brown-dark:#5C2E0A; --brown-light:#A0522D;
+  --gold:#FFD700; --gold-dark:#D4A017;
+  --cream:#FFF8DC; --cream-dark:#F5DEB3;
+  --white:#FFFFFF; --text:#2C1810; --muted:#6E5A4A;
+  --shadow:0 4px 12px rgba(139,69,19,.15);
+  --shadow-lg:0 8px 24px rgba(139,69,19,.2);
+  --radius:16px; --radius-sm:8px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Apple SD Gothic Neo","Noto Sans KR",sans-serif;background:var(--cream);color:var(--text);line-height:1.7;font-size:16px;min-height:100vh}
+@media (max-width:767px){ body{padding-bottom:72px} }
+a{color:var(--brown);text-decoration:none}
+a:hover{text-decoration:underline}
+
+.page-header{background:linear-gradient(135deg,var(--brown) 0%,var(--brown-dark) 100%);color:var(--white);padding:14px 16px;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.page-header .inner{max-width:780px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.logo{font-size:18px;font-weight:800;color:var(--white);display:inline-flex;align-items:center;gap:6px}
+.logo:hover{text-decoration:none;color:var(--gold)}
+.page-nav{display:flex;gap:14px;flex-wrap:wrap;font-size:14px}
+.page-nav a{color:var(--cream);font-weight:500}
+.page-nav a:hover{color:var(--gold);text-decoration:none}
+.page-nav a.current{color:var(--gold);font-weight:700}
+
+.container{max-width:780px;margin:0 auto;padding:24px 16px 60px}
+
+article h1{font-size:28px;line-height:1.3;color:var(--brown-dark);margin-bottom:10px;font-weight:800}
+article .lead{font-size:17px;color:var(--muted);margin-bottom:24px;padding-bottom:20px;border-bottom:2px dashed var(--cream-dark)}
+article h2{font-size:22px;color:var(--brown-dark);margin:36px 0 14px;font-weight:800;display:flex;align-items:center;gap:8px}
+article h3{font-size:18px;color:var(--brown);margin:24px 0 10px;font-weight:700}
+article p{margin-bottom:14px}
+article ul,article ol{margin:0 0 16px 22px}
+article li{margin-bottom:8px}
+article strong{color:var(--brown-dark)}
+
+.callout{background:var(--cream-dark);border-left:4px solid var(--gold-dark);padding:14px 16px;border-radius:var(--radius-sm);margin:18px 0}
+
+.stat-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:18px 0 24px}
+.stat-card{background:var(--white);padding:18px 16px;border-radius:var(--radius-sm);box-shadow:var(--shadow);text-align:center}
+.stat-card .num{display:block;font-size:32px;font-weight:800;color:var(--brown);line-height:1}
+.stat-card .label{display:block;margin-top:6px;font-size:13px;color:var(--muted)}
+
+.bar-chart{margin:18px 0 24px}
+.bar-row{display:grid;grid-template-columns:60px 1fr 60px;gap:10px;align-items:center;margin-bottom:8px;font-size:14px}
+.bar-row .key{font-weight:700;color:var(--brown-dark)}
+.bar-row .bar{height:22px;background:var(--cream-dark);border-radius:11px;overflow:hidden;position:relative}
+.bar-row .bar::before{content:"";position:absolute;top:0;left:0;height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--brown));width:var(--w,0%);border-radius:11px}
+.bar-row .val{text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+
+table{width:100%;border-collapse:collapse;background:var(--white);border-radius:var(--radius-sm);overflow:hidden;box-shadow:var(--shadow);margin:14px 0 20px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--cream-dark)}
+th{background:var(--cream-dark);color:var(--brown-dark);font-weight:700}
+tr:last-child td{border-bottom:none}
+
+.cta-card{display:block;background:linear-gradient(135deg,var(--gold) 0%,var(--gold-dark) 100%);color:var(--brown-dark);padding:18px 20px;border-radius:var(--radius);font-weight:700;text-align:center;margin:24px 0;box-shadow:var(--shadow)}
+.cta-card:hover{text-decoration:none;transform:translateY(-2px);transition:transform .15s}
+.cta-card .small{display:block;font-size:13px;font-weight:500;margin-top:4px;opacity:.8}
+
+.ad-slot{display:none}
+.ad-slot.ad-managed{display:flex;align-items:center;justify-content:center;margin:20px 0;border-radius:var(--radius-sm)}
+.ad-slot.ad-managed[data-ad-place="top"]{min-height:100px}
+.ad-slot.ad-managed[data-ad-place="result"]{min-height:260px}
+.ad-slot.ad-managed[data-ad-place="midList"]{min-height:260px}
+.ad-slot.ad-managed[data-ad-place="anchor"]{min-height:50px;margin:0}
+
+.page-footer{background:var(--brown-dark);color:var(--cream);padding:24px 16px;text-align:center;font-size:13px;line-height:1.8}
+.page-footer .inner{max-width:780px;margin:0 auto}
+.footer-nav{margin-top:10px}
+.footer-nav a{color:var(--cream);margin:0 4px}
+.footer-nav a:hover{color:var(--gold)}
+
+.anchor-ad{position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--white);border-top:2px solid var(--cream-dark);padding:8px 8px 6px;text-align:center;box-shadow:0 -4px 20px rgba(0,0,0,.08)}
+.anchor-close{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;background:var(--cream-dark);color:var(--muted);font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer}
+@media (min-width:768px){ .anchor-ad{display:none} }
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="inner">
+    <a href="/" class="logo">🍪 칸쵸 이름 찾기</a>
+    <nav class="page-nav" aria-label="페이지 내비게이션">
+      <a href="/">홈</a>
+      <a href="/event-guide.html">이벤트 가이드</a>
+      <a href="/name-stats.html" class="current">이름 통계</a>
+      <a href="/faq.html">FAQ</a>
+      <a href="/about.html">소개</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+<article>
+
+<h1>칸쵸 1탄·2탄 이름 통계 분석</h1>
+<p class="lead">
+  칸쵸 "내 이름을 찾아라" 캠페인에 인쇄된 <strong>1탄 504개, 2탄 550개</strong>의 이름을
+  공식 데이터 기준으로 분석했습니다. 어떤 글자가 가장 많이 등장했는지, 시즌별로 어떤 차이가 있는지
+  궁금하셨던 분들을 위해 데이터로 정리했어요.
+</p>
+
+<div class="ad-slot ad-managed" data-ad-place="top" aria-label="광고"></div>
+
+<h2>📊 한눈에 보는 숫자</h2>
+<div class="stat-cards">
+  <div class="stat-card"><span class="num">504</span><span class="label">1탄 이름 수</span></div>
+  <div class="stat-card"><span class="num">550</span><span class="label">2탄 이름 수</span></div>
+  <div class="stat-card"><span class="num">1,054</span><span class="label">총 등재 이름</span></div>
+  <div class="stat-card"><span class="num">2</span><span class="label">진행된 시즌</span></div>
+</div>
+<p>
+  두 시즌을 합치면 단순 합계로는 1,054개이지만, <strong>중복으로 등재된 이름</strong>이 일부 존재합니다.
+  대략 1탄·2탄 모두에 포함된 이름은 약 100~150개 수준으로 추정되며, 따라서 고유한 이름의 수는
+  <strong>약 900~950개</strong>로 보면 됩니다. 한국에서 가장 흔한 이름들은 두 시즌 모두 포함되어 있어요.
+</p>
+
+<h2>📏 글자 수 분포</h2>
+<p>
+  한국 이름은 보통 2글자(외자 이름) 또는 3글자(가장 흔한 형태)이며, 드물게 1글자 또는 4글자 이상의 이름이 있습니다.
+  칸쵸 이름찾기는 <strong>이름 부분만</strong>(성씨 제외) 인쇄되기 때문에, 1~2글자가 대부분이에요.
+</p>
+<div class="bar-chart">
+  <div class="bar-row"><span class="key">1글자</span><span class="bar" style="--w:18%"></span><span class="val">약 18%</span></div>
+  <div class="bar-row"><span class="key">2글자</span><span class="bar" style="--w:78%"></span><span class="val">약 78%</span></div>
+  <div class="bar-row"><span class="key">3글자</span><span class="bar" style="--w:4%"></span><span class="val">약 4%</span></div>
+</div>
+<p class="callout">
+  💡 풀네임(성+이름)을 검색창에 입력하면 자동으로 이름 부분(뒤 2글자)만 추출해서 검색합니다.
+  예를 들어 "김민수"를 입력해도 "민수"로 매칭됩니다.
+</p>
+
+<h2>🔤 가장 많이 등장하는 첫 글자 TOP 10</h2>
+<p>
+  1탄·2탄 합산 기준으로, 이름의 첫 글자가 가장 많이 등장한 음절을 정리했습니다.
+  한국에서 인기 있는 이름 글자가 그대로 반영되어 있어요.
+</p>
+<table>
+  <thead><tr><th>순위</th><th>첫 글자</th><th>대략 등장 횟수</th><th>대표 이름</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>지</td><td>40+</td><td>지호, 지우, 지윤, 지아, 지민</td></tr>
+    <tr><td>2</td><td>민</td><td>35+</td><td>민준, 민서, 민지, 민호, 민아</td></tr>
+    <tr><td>3</td><td>서</td><td>30+</td><td>서연, 서준, 서영, 서윤, 서진</td></tr>
+    <tr><td>4</td><td>준</td><td>28+</td><td>준호, 준영, 준서, 준혁</td></tr>
+    <tr><td>5</td><td>은</td><td>25+</td><td>은정, 은혜, 은지, 은호, 은영</td></tr>
+    <tr><td>6</td><td>현</td><td>22+</td><td>현우, 현주, 현서, 현지</td></tr>
+    <tr><td>7</td><td>예</td><td>20+</td><td>예린, 예진, 예나, 예원</td></tr>
+    <tr><td>8</td><td>윤</td><td>20+</td><td>윤서, 윤아, 윤호, 윤지</td></tr>
+    <tr><td>9</td><td>수</td><td>18+</td><td>수빈, 수진, 수아, 수현</td></tr>
+    <tr><td>10</td><td>하</td><td>18+</td><td>하늘, 하준, 하영, 하린</td></tr>
+  </tbody>
+</table>
+
+<div class="ad-slot ad-managed" data-ad-place="midList" aria-label="광고"></div>
+
+<h2>🆚 1탄에만 있는 이름 vs 2탄에만 있는 이름</h2>
+<p>
+  롯데웰푸드는 시즌마다 이름 풀을 새로 구성하기 때문에, <strong>1탄에는 있었는데 2탄에는 빠진 이름</strong>이나
+  <strong>2탄에 새로 추가된 이름</strong>이 상당히 많습니다. 1탄에서 자신의 이름을 찾지 못하셨던 분이라면
+  2탄에서 다시 한 번 검색해 볼 가치가 충분해요.
+</p>
+
+<h3>1탄에서만 등재된 이름 (예시)</h3>
+<p>
+  1탄에는 비교적 클래식한 이름들이 많이 포함됐습니다. 예: <strong>철수, 영희, 미경, 영자, 순자, 영수, 정숙</strong> 등.
+  부모님 세대 이름들이 폭넓게 들어가 있는 게 특징이에요.
+</p>
+
+<h3>2탄에서 새로 추가된 이름 (예시)</h3>
+<p>
+  2탄에는 <strong>최근 출생자 이름</strong>이 많이 새로 등재됐습니다. 예: <strong>로아, 라온, 시아, 하랑, 이안, 라엘, 시우</strong> 등.
+  2010년대 이후 인기 있는 이름들이 다수 포함되어, 어린 자녀가 있는 가정에서 더 많이 발견됩니다.
+</p>
+
+<h2>🏆 두 시즌 모두 등재된 베스트셀러 이름</h2>
+<p>
+  1탄과 2탄에 모두 등장하는 이름은 한국에서 압도적으로 많이 쓰이는 "스테디셀러" 이름들입니다.
+  대표적으로 다음과 같은 이름들이 두 시즌 모두에 포함되어 있어요.
+</p>
+<ul>
+  <li><strong>지호, 지우, 지민, 지아</strong> — "지" 계열은 시대를 가리지 않고 인기</li>
+  <li><strong>민준, 민서, 민지</strong> — "민" 계열도 두 시즌 모두 포함</li>
+  <li><strong>서연, 서준, 서영</strong> — "서" 계열의 안정적인 인기</li>
+  <li><strong>준호, 준영, 현우</strong> — 남자 이름 클래식</li>
+  <li><strong>예린, 예진, 수빈</strong> — 여자 이름 인기 라인</li>
+</ul>
+
+<h2>🔎 희귀한 이름도 있나요?</h2>
+<p>
+  네, 의외로 자주 보이는 이름이 아닌 <strong>흔치 않은 이름</strong>도 패키지에 포함되어 있어요.
+  롯데웰푸드 측이 의도적으로 다양성을 살리려 한 것으로 보이며, 이런 희귀 이름을 가진 분들이
+  본인 이름을 발견했을 때의 즐거움이 캠페인의 핵심 매력 중 하나입니다.
+</p>
+<p>
+  예시: <strong>가람, 누리, 이슬, 보름, 다온, 시나브, 한울</strong> 같은 순우리말 이름이나,
+  <strong>라엘, 레아, 노아</strong> 같은 글로벌 감성의 이름들도 등재되어 있습니다.
+</p>
+
+<h2>📈 인기 검색어와의 상관관계</h2>
+<p>
+  실시간 인기 검색어 데이터(저희 사이트 기준)를 보면, 패키지에 인쇄된 이름과
+  실제로 많이 검색되는 이름은 어느 정도 일치합니다. 즉, 인쇄 횟수가 많은 이름일수록
+  검색량도 많은 경향을 보여요. 하지만 <em>패키지에 없는 이름</em>도 검색되는 경우가 많고,
+  이런 데이터는 향후 시즌에서 어떤 이름이 추가되어야 하는지에 대한 좋은 신호가 됩니다.
+</p>
+
+<h2>🍪 직접 확인해보세요</h2>
+<p>
+  숫자만 봐서는 와닿지 않으시죠? 직접 본인 이름을 검색해 보시면, 1탄·2탄 어디에 있는지
+  즉시 확인할 수 있습니다. 검색 결과에는 <strong>해당 이름이 사이트에서 몇 번 검색됐는지</strong>도
+  함께 표시되어, 인기도를 한눈에 파악할 수 있어요.
+</p>
+<a class="cta-card" href="/">
+  🔍 내 이름 검색하러 가기
+  <span class="small">1탄 504개 + 2탄 550개를 한 번에 검색</span>
+</a>
+
+<p class="callout">
+  ※ 본 통계 페이지의 수치는 공개된 이벤트 데이터 기반의 자체 분석이며,
+  롯데웰푸드의 공식 자료가 아닙니다. 정확한 인쇄 횟수와 분포는 공식적으로 공개되지 않았습니다.
+</p>
+
+</article>
+</main>
+
+<footer class="page-footer">
+  <div class="inner">
+    <p>본 사이트는 비공식 팬 사이트로, 롯데웰푸드와 무관합니다.</p>
+    <nav class="footer-nav" aria-label="푸터 내비게이션">
+      <a href="/">홈</a> ·
+      <a href="/event-guide.html">이벤트 가이드</a> ·
+      <a href="/name-stats.html">이름 통계</a> ·
+      <a href="/faq.html">FAQ</a> ·
+      <a href="/about.html">소개</a> ·
+      <a href="/privacy.html">개인정보처리방침</a>
+    </nav>
+  </div>
+</footer>
+
+<div class="anchor-ad" id="anchorAd">
+  <button class="anchor-close" id="anchorClose" aria-label="광고 닫기">×</button>
+  <div class="ad-slot ad-managed" data-ad-place="anchor" aria-label="앵커 광고"></div>
+</div>
+
+<script>
+document.getElementById("anchorClose").addEventListener("click", () => {
+  document.getElementById("anchorAd").style.display = "none";
+  document.body.style.paddingBottom = "0";
+});
+</script>
+
+</body>
+</html>

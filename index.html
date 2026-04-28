@@ -42,9 +42,105 @@
 
 <!-- Google AdSense (승인 대기 중) -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7640232155148288" crossorigin="anonymous"></script>
+<!-- 카카오 애드핏 스크립트는 광고 렌더러가 동적으로 주입함 -->
 
-<!-- 카카오 애드핏 -->
-<script type="text/javascript" src="//t1.kakaocdn.net/kas/static/ba.min.js" async></script>
+<!-- ============================================================
+     광고 시스템 (AdSense 우선, AdFit 폴백)
+     - AD_CONFIG.adsense.enabled = false  → AdFit만 즉시 렌더
+     - AD_CONFIG.adsense.enabled = true   → AdSense push, 3초 안에
+       data-ad-status="filled"이 아니면 AdFit으로 교체
+     - 모든 페이지에서 동일하게 사용 (콘텐츠 페이지도 공유)
+     ============================================================ -->
+<script>
+window.AD_CONFIG = {
+  adsense: {
+    client: "ca-pub-7640232155148288",
+    enabled: false, // ⚠ AdSense 승인 후 true로 변경
+    slots: {
+      // ⚠ AdSense 광고 단위 ID (승인 후 콘솔에서 발급받아 입력)
+      top: "",
+      result: "",
+      midList: "",
+      anchor: ""
+    }
+  },
+  adfit: {
+    units: {
+      top:     { id: "DAN-6VZjolAcns6K03AT", w: 320, h: 100 },
+      result:  { id: "DAN-OgWTWQiwtw3GIyhh", w: 300, h: 250 },
+      midList: { id: "DAN-asS7Gq5tB0zBcIym", w: 300, h: 250 },
+      anchor:  { id: "DAN-BYsY4PHvTt986PjV", w: 320, h: 50  }
+    }
+  },
+  fallbackTimeoutMs: 3000
+};
+
+(function(){
+  let adfitScriptLoaded = false;
+  function loadAdFitScript(){
+    // ba.min.js는 매번 실행 시 DOM을 재스캔하므로 새 ins 추가 후 재주입 가능
+    const s = document.createElement("script");
+    s.src = "//t1.kakaocdn.net/kas/static/ba.min.js";
+    s.async = true;
+    document.head.appendChild(s);
+    adfitScriptLoaded = true;
+  }
+
+  function renderAdFit(slot, cfg){
+    slot.innerHTML =
+      '<ins class="kakao_ad_area" style="display:none;"' +
+      ' data-ad-unit="' + cfg.id + '"' +
+      ' data-ad-width="' + cfg.w + '"' +
+      ' data-ad-height="' + cfg.h + '"></ins>';
+    loadAdFitScript();
+  }
+
+  function renderAdSense(slot, cfg, slotId){
+    slot.innerHTML =
+      '<ins class="adsbygoogle"' +
+      ' style="display:inline-block;width:' + cfg.w + 'px;height:' + cfg.h + 'px"' +
+      ' data-ad-client="' + window.AD_CONFIG.adsense.client + '"' +
+      ' data-ad-slot="' + slotId + '"></ins>';
+    try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+  }
+
+  function checkAndFallback(slot, place){
+    const ins = slot.querySelector(".adsbygoogle");
+    if (!ins) return;
+    const status = ins.getAttribute("data-ad-status");
+    if (status === "filled") return; // AdSense 채워짐 - 유지
+    // 미충전 - AdFit으로 교체
+    renderAdFit(slot, window.AD_CONFIG.adfit.units[place]);
+  }
+
+  function renderSlot(slot){
+    const place = slot.dataset.adPlace;
+    const adfitCfg = window.AD_CONFIG.adfit.units[place];
+    if (!adfitCfg) return;
+
+    const adsenseCfg = window.AD_CONFIG.adsense;
+    const adsenseSlotId = adsenseCfg.slots[place];
+    const adsenseReady = adsenseCfg.enabled && adsenseSlotId;
+
+    if (adsenseReady){
+      renderAdSense(slot, adfitCfg, adsenseSlotId);
+      setTimeout(() => checkAndFallback(slot, place), window.AD_CONFIG.fallbackTimeoutMs);
+    } else {
+      renderAdFit(slot, adfitCfg);
+    }
+  }
+
+  function initAds(){
+    document.querySelectorAll(".ad-managed").forEach(renderSlot);
+  }
+
+  if (document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", initAds);
+  } else {
+    initAds();
+  }
+})();
+</script>
 
 <!-- JSON-LD: WebApplication -->
 <script type="application/ld+json">
@@ -140,22 +236,19 @@ body{
 button{font-family:inherit;cursor:pointer;border:none;background:none}
 input{font-family:inherit}
 
-/* 광고 슬롯 - 빈 광고 영역은 숨김 (실제 광고 코드 삽입 시 표시) */
+/* 광고 슬롯 (관리형) — JS가 데이터에 맞는 광고를 주입하기 전에도
+   레이아웃이 흔들리지 않도록 위치별로 높이를 예약 */
 .ad-slot{display:none}
-.ad-slot:not(:empty){
+.ad-slot.ad-managed{
   display:flex;align-items:center;justify-content:center;
-  margin:20px 0;
-  border-radius:var(--radius-sm);
-  min-height:90px;
+  margin:20px 0;border-radius:var(--radius-sm);
 }
-/* 카카오 애드핏: 미노출 시에도 레이아웃이 흔들리지 않도록 높이 예약 */
-.ad-slot.ad-kakao{
-  display:flex;align-items:center;justify-content:center;
-  margin:20px 0;min-height:100px;
-}
-.ad-slot.ad-kakao.size-300x250{min-height:260px}
-.ad-slot.ad-kakao.size-320x50{min-height:50px;margin:8px 0}
-.ad-slot.ad-kakao .kakao_ad_area{max-width:100%}
+.ad-slot.ad-managed[data-ad-place="top"]{min-height:100px}
+.ad-slot.ad-managed[data-ad-place="result"]{min-height:260px}
+.ad-slot.ad-managed[data-ad-place="midList"]{min-height:260px}
+.ad-slot.ad-managed[data-ad-place="anchor"]{min-height:50px;margin:0}
+.ad-slot.ad-managed .kakao_ad_area,
+.ad-slot.ad-managed .adsbygoogle{max-width:100%}
 
 /* Header / Hero */
 header{
@@ -515,6 +608,21 @@ section{margin:32px 0}
   font-size:13px;line-height:1.5;color:var(--brown-dark);
 }
 .buy-notice strong{color:#D2691E}
+.affiliate-ad{
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  margin-top:12px;padding:14px;
+  background:var(--white);
+  border:1px solid var(--cream-dark);
+  border-radius:var(--radius-sm);
+}
+.affiliate-ad iframe{display:block;max-width:100%}
+.affiliate-disclosure{
+  margin:0;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+  text-align:center;
+}
 
 /* FAQ */
 .faq{
@@ -591,8 +699,12 @@ footer{
   padding:32px 16px;
   color:var(--muted);
   font-size:13px;
+  line-height:1.8;
 }
 footer a{color:var(--brown);text-decoration:none;font-weight:600}
+footer .footer-nav{margin-top:14px}
+footer .footer-nav a{margin:0 4px;font-weight:500}
+footer .footer-nav a:hover{text-decoration:underline}
 
 /* Responsive */
 @media (min-width:481px){
@@ -636,24 +748,14 @@ footer a{color:var(--brown);text-decoration:none;font-weight:600}
 
 <main class="container">
 
-  <!-- 상단 배너 광고 (카카오 애드핏 320x100) -->
-  <div class="ad-slot ad-kakao" aria-label="광고">
-    <ins class="kakao_ad_area" style="display:none;"
-      data-ad-unit="DAN-6VZjolAcns6K03AT"
-      data-ad-width="320"
-      data-ad-height="100"></ins>
-  </div>
+  <!-- 상단 배너 광고 (AdSense 우선, AdFit 320x100 폴백) -->
+  <div class="ad-slot ad-managed" data-ad-place="top" aria-label="광고"></div>
 
   <!-- 검색 결과 -->
   <div class="result" id="result" role="region" aria-live="polite"></div>
 
-  <!-- 검색 결과 하단 광고 (카카오 애드핏 300x250) -->
-  <div class="ad-slot ad-kakao size-300x250" id="adAfterResult" style="display:none" aria-label="광고">
-    <ins class="kakao_ad_area" style="display:none;"
-      data-ad-unit="DAN-OgWTWQiwtw3GIyhh"
-      data-ad-width="300"
-      data-ad-height="250"></ins>
-  </div>
+  <!-- 검색 결과 하단 광고 (AdSense 우선, AdFit 300x250 폴백) -->
+  <div class="ad-slot ad-managed" id="adAfterResult" data-ad-place="result" style="display:none" aria-label="광고"></div>
 
   <!-- 실시간 인기 검색어 -->
   <section aria-labelledby="topTitle">
@@ -678,13 +780,8 @@ footer a{color:var(--brown);text-decoration:none;font-weight:600}
     <div class="list-container" id="listContainer"></div>
   </section>
 
-  <!-- 목록 중간 광고 (카카오 애드핏 300x250) -->
-  <div class="ad-slot ad-kakao size-300x250" aria-label="광고">
-    <ins class="kakao_ad_area" style="display:none;"
-      data-ad-unit="DAN-asS7Gq5tB0zBcIym"
-      data-ad-width="300"
-      data-ad-height="250"></ins>
-  </div>
+  <!-- 목록 중간 광고 (AdSense 우선, AdFit 300x250 폴백) -->
+  <div class="ad-slot ad-managed" data-ad-place="midList" aria-label="광고"></div>
 
   <!-- 이벤트 정보 -->
   <section class="event-info" aria-labelledby="eventTitle">
@@ -717,11 +814,11 @@ footer a{color:var(--brown);text-decoration:none;font-weight:600}
       <span class="arrow" aria-hidden="true">→</span>
     </a>
 
-    <a class="buy-link" href="https://kko.to/7A-2-pxGCG" target="_blank" rel="noopener" aria-label="칸쵸 구매하기">
+    <a class="buy-link" href="https://link.coupang.com/a/eA8l43" target="_blank" rel="noopener sponsored" aria-label="쿠팡에서 칸쵸 구매하기">
       <span class="ico" aria-hidden="true">🛒</span>
       <span class="txt">
         <span class="title">칸쵸 구매하러 가기</span>
-        <span class="sub">카카오톡 쇼핑 링크 · 제휴 링크 아님</span>
+        <span class="sub">쿠팡 바로가기 · 파트너스 링크</span>
       </span>
       <span class="arrow" aria-hidden="true">→</span>
     </a>
@@ -730,6 +827,11 @@ footer a{color:var(--brown);text-decoration:none;font-weight:600}
       ⚠️ <strong>구매 전 꼭 확인하세요!</strong><br>
       위 검색 결과가 <strong>2탄</strong>에 있는지 확인 후 구매하시는 것을 추천드려요. 1탄과 2탄은 패키지에 새겨진 이름이 다릅니다.
     </p>
+
+    <div class="affiliate-ad" aria-label="쿠팡 파트너스 상품 광고">
+      <iframe src="https://coupa.ng/cmGMem" width="120" height="240" frameborder="0" scrolling="no" referrerpolicy="unsafe-url" browsingtopics title="쿠팡 파트너스 칸쵸 상품 광고"></iframe>
+      <p class="affiliate-disclosure">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+    </div>
   </section>
 
   <!-- FAQ -->
@@ -777,18 +879,20 @@ footer a{color:var(--brown);text-decoration:none;font-weight:600}
   <footer>
     <p>본 사이트는 비공식 팬 사이트로, 롯데웰푸드와 무관합니다.</p>
     <p style="margin-top:6px">정확한 이벤트 정보는 <a href="https://www.lottewellfood.com" target="_blank" rel="noopener">롯데웰푸드 공식 홈페이지</a>를 확인하세요.</p>
+    <nav class="footer-nav" aria-label="추가 정보 페이지">
+      <a href="/event-guide.html">이벤트 가이드</a> ·
+      <a href="/name-stats.html">이름 통계</a> ·
+      <a href="/faq.html">FAQ</a> ·
+      <a href="/about.html">소개</a> ·
+      <a href="/privacy.html">개인정보처리방침</a>
+    </nav>
   </footer>
 </main>
 
-<!-- 모바일 앵커 광고 (카카오 애드핏 320x50) -->
+<!-- 모바일 앵커 광고 (AdSense 우선, AdFit 320x50 폴백) -->
 <div class="anchor-ad" id="anchorAd">
   <button class="anchor-close" id="anchorClose" aria-label="광고 닫기">×</button>
-  <div class="ad-slot ad-kakao size-320x50" aria-label="앵커 광고">
-    <ins class="kakao_ad_area" style="display:none;"
-      data-ad-unit="DAN-BYsY4PHvTt986PjV"
-      data-ad-width="320"
-      data-ad-height="50"></ins>
-  </div>
+  <div class="ad-slot ad-managed" data-ad-place="anchor" aria-label="앵커 광고"></div>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -1398,15 +1502,7 @@ if (initialName){
   setTimeout(doSearch, 200);
 }
 
-// AdSense push (승인 후 .ad-slot 안에 <ins class="adsbygoogle">를 넣을 때 활성화)
-// 카카오 애드핏 슬롯(.ad-kakao)은 자체 스크립트가 처리하므로 제외
-try {
-  document.querySelectorAll(".ad-slot:not(.ad-kakao)").forEach((slot) => {
-    if (slot.querySelector(".adsbygoogle") && window.adsbygoogle) {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    }
-  });
-} catch(e){}
+// 광고 렌더링은 head의 AD_CONFIG 시스템이 처리 (DOMContentLoaded에서 자동 실행)
 
 // 동적으로 개수 라벨 채우기
 document.getElementById("tab1").textContent = `1탄 (${SEASON1_NAMES.length}개)`;

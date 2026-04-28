@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="theme-color" content="#8B4513"/>
+<title>칸쵸 "내 이름을 찾아라" 이벤트 참여 가이드 | 1탄 2탄 응모 방법 총정리</title>
+<meta name="description" content="롯데 칸쵸 '내 이름을 찾아라' 이벤트 1탄(504개)·2탄(550개) 참여 방법을 단계별로 정리했습니다. 응모 기간, 경품, 자주 하는 실수, 팁까지 한눈에 확인하세요."/>
+<meta name="keywords" content="칸쵸 이벤트, 칸쵸 이름찾기, 내 이름을 찾아라, 칸쵸 1탄, 칸쵸 2탄, 롯데 칸쵸 이벤트, 응모 방법"/>
+<link rel="canonical" href="https://chani1209.github.io/event-guide.html"/>
+
+<meta property="og:title" content="칸쵸 '내 이름을 찾아라' 이벤트 참여 가이드"/>
+<meta property="og:description" content="1탄·2탄 응모 방법, 경품, 일정, 자주 하는 실수까지 한눈에 정리한 종합 가이드."/>
+<meta property="og:url" content="https://chani1209.github.io/event-guide.html"/>
+<meta property="og:type" content="article"/>
+<meta property="og:locale" content="ko_KR"/>
+<meta name="twitter:card" content="summary"/>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "칸쵸 '내 이름을 찾아라' 이벤트 참여 가이드",
+  "description": "롯데 칸쵸 '내 이름을 찾아라' 1탄·2탄 응모 방법을 단계별로 정리한 가이드.",
+  "datePublished": "2026-04-28",
+  "dateModified": "2026-04-28",
+  "inLanguage": "ko-KR",
+  "author": { "@type": "Organization", "name": "칸쵸 이름 찾기" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "홈", "item": "https://chani1209.github.io/" },
+    { "@type": "ListItem", "position": 2, "name": "이벤트 가이드", "item": "https://chani1209.github.io/event-guide.html" }
+  ]
+}
+</script>
+
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YXVT2W3NSG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-YXVT2W3NSG');
+</script>
+
+<!-- Google AdSense (승인 대기 중) -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7640232155148288" crossorigin="anonymous"></script>
+
+<!-- 광고 시스템 (AdSense 우선, AdFit 폴백) -->
+<script>
+window.AD_CONFIG = {
+  adsense: {
+    client: "ca-pub-7640232155148288",
+    enabled: false,
+    slots: { top: "", result: "", midList: "", anchor: "" }
+  },
+  adfit: {
+    units: {
+      top:     { id: "DAN-6VZjolAcns6K03AT", w: 320, h: 100 },
+      result:  { id: "DAN-OgWTWQiwtw3GIyhh", w: 300, h: 250 },
+      midList: { id: "DAN-asS7Gq5tB0zBcIym", w: 300, h: 250 },
+      anchor:  { id: "DAN-BYsY4PHvTt986PjV", w: 320, h: 50  }
+    }
+  },
+  fallbackTimeoutMs: 3000
+};
+(function(){
+  function loadAdFitScript(){
+    const s = document.createElement("script");
+    s.src = "//t1.kakaocdn.net/kas/static/ba.min.js";
+    s.async = true;
+    document.head.appendChild(s);
+  }
+  function renderAdFit(slot, cfg){
+    slot.innerHTML =
+      '<ins class="kakao_ad_area" style="display:none;"' +
+      ' data-ad-unit="' + cfg.id + '"' +
+      ' data-ad-width="' + cfg.w + '"' +
+      ' data-ad-height="' + cfg.h + '"></ins>';
+    loadAdFitScript();
+  }
+  function renderAdSense(slot, cfg, slotId){
+    slot.innerHTML =
+      '<ins class="adsbygoogle"' +
+      ' style="display:inline-block;width:' + cfg.w + 'px;height:' + cfg.h + 'px"' +
+      ' data-ad-client="' + window.AD_CONFIG.adsense.client + '"' +
+      ' data-ad-slot="' + slotId + '"></ins>';
+    try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+  }
+  function checkAndFallback(slot, place){
+    const ins = slot.querySelector(".adsbygoogle");
+    if (!ins) return;
+    if (ins.getAttribute("data-ad-status") === "filled") return;
+    renderAdFit(slot, window.AD_CONFIG.adfit.units[place]);
+  }
+  function renderSlot(slot){
+    const place = slot.dataset.adPlace;
+    const adfitCfg = window.AD_CONFIG.adfit.units[place];
+    if (!adfitCfg) return;
+    const adsenseCfg = window.AD_CONFIG.adsense;
+    const slotId = adsenseCfg.slots[place];
+    if (adsenseCfg.enabled && slotId){
+      renderAdSense(slot, adfitCfg, slotId);
+      setTimeout(() => checkAndFallback(slot, place), window.AD_CONFIG.fallbackTimeoutMs);
+    } else {
+      renderAdFit(slot, adfitCfg);
+    }
+  }
+  function initAds(){ document.querySelectorAll(".ad-managed").forEach(renderSlot); }
+  if (document.readyState === "loading"){ document.addEventListener("DOMContentLoaded", initAds); }
+  else { initAds(); }
+})();
+</script>
+
+<style>
+:root{
+  --brown:#8B4513; --brown-dark:#5C2E0A; --brown-light:#A0522D;
+  --gold:#FFD700; --gold-dark:#D4A017;
+  --cream:#FFF8DC; --cream-dark:#F5DEB3;
+  --white:#FFFFFF; --text:#2C1810; --muted:#6E5A4A;
+  --shadow:0 4px 12px rgba(139,69,19,.15);
+  --shadow-lg:0 8px 24px rgba(139,69,19,.2);
+  --radius:16px; --radius-sm:8px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  background:var(--cream);color:var(--text);
+  line-height:1.7;font-size:16px;
+  min-height:100vh;
+}
+@media (max-width:767px){ body{padding-bottom:72px} }
+
+a{color:var(--brown);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* 헤더 */
+.page-header{
+  background:linear-gradient(135deg,var(--brown) 0%,var(--brown-dark) 100%);
+  color:var(--white);padding:14px 16px;
+  position:sticky;top:0;z-index:50;
+  box-shadow:var(--shadow);
+}
+.page-header .inner{
+  max-width:780px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;flex-wrap:wrap;
+}
+.logo{
+  font-size:18px;font-weight:800;color:var(--white);
+  display:inline-flex;align-items:center;gap:6px;
+}
+.logo:hover{text-decoration:none;color:var(--gold)}
+.page-nav{
+  display:flex;gap:14px;flex-wrap:wrap;
+  font-size:14px;
+}
+.page-nav a{color:var(--cream);font-weight:500}
+.page-nav a:hover{color:var(--gold);text-decoration:none}
+.page-nav a.current{color:var(--gold);font-weight:700}
+
+/* 컨테이너 */
+.container{max-width:780px;margin:0 auto;padding:24px 16px 60px}
+
+/* 아티클 */
+article h1{
+  font-size:28px;line-height:1.3;color:var(--brown-dark);
+  margin-bottom:10px;font-weight:800;
+}
+article .lead{
+  font-size:17px;color:var(--muted);
+  margin-bottom:24px;padding-bottom:20px;
+  border-bottom:2px dashed var(--cream-dark);
+}
+article h2{
+  font-size:22px;color:var(--brown-dark);
+  margin:36px 0 14px;font-weight:800;
+  display:flex;align-items:center;gap:8px;
+}
+article h3{
+  font-size:18px;color:var(--brown);
+  margin:24px 0 10px;font-weight:700;
+}
+article p{margin-bottom:14px}
+article ul,article ol{margin:0 0 16px 22px}
+article li{margin-bottom:8px}
+article strong{color:var(--brown-dark)}
+
+.callout{
+  background:var(--cream-dark);border-left:4px solid var(--gold-dark);
+  padding:14px 16px;border-radius:var(--radius-sm);
+  margin:18px 0;
+}
+.callout.warn{background:#FFF3E0;border-left-color:#E67E22}
+.callout.tip{background:#E8F5E9;border-left-color:#43A047}
+
+.steps{
+  list-style:none;margin:0 0 20px;padding:0;
+  counter-reset:step;
+}
+.steps li{
+  position:relative;padding:14px 14px 14px 56px;
+  background:var(--white);border-radius:var(--radius-sm);
+  margin-bottom:10px;box-shadow:var(--shadow);
+  counter-increment:step;
+}
+.steps li::before{
+  content:counter(step);
+  position:absolute;left:14px;top:14px;
+  width:32px;height:32px;border-radius:50%;
+  background:var(--brown);color:var(--white);
+  font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+}
+
+table{
+  width:100%;border-collapse:collapse;
+  background:var(--white);border-radius:var(--radius-sm);overflow:hidden;
+  box-shadow:var(--shadow);margin:14px 0 20px;
+}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--cream-dark)}
+th{background:var(--cream-dark);color:var(--brown-dark);font-weight:700}
+tr:last-child td{border-bottom:none}
+
+.cta-card{
+  display:block;background:linear-gradient(135deg,var(--gold) 0%,var(--gold-dark) 100%);
+  color:var(--brown-dark);
+  padding:18px 20px;border-radius:var(--radius);
+  font-weight:700;text-align:center;
+  margin:24px 0;box-shadow:var(--shadow);
+}
+.cta-card:hover{text-decoration:none;transform:translateY(-2px);transition:transform .15s}
+.cta-card .small{display:block;font-size:13px;font-weight:500;margin-top:4px;opacity:.8}
+
+/* 광고 슬롯 */
+.ad-slot{display:none}
+.ad-slot.ad-managed{
+  display:flex;align-items:center;justify-content:center;
+  margin:20px 0;border-radius:var(--radius-sm);
+}
+.ad-slot.ad-managed[data-ad-place="top"]{min-height:100px}
+.ad-slot.ad-managed[data-ad-place="result"]{min-height:260px}
+.ad-slot.ad-managed[data-ad-place="midList"]{min-height:260px}
+.ad-slot.ad-managed[data-ad-place="anchor"]{min-height:50px;margin:0}
+
+/* 푸터 */
+.page-footer{
+  background:var(--brown-dark);color:var(--cream);
+  padding:24px 16px;text-align:center;
+  font-size:13px;line-height:1.8;
+}
+.page-footer .inner{max-width:780px;margin:0 auto}
+.footer-nav{margin-top:10px}
+.footer-nav a{color:var(--cream);margin:0 4px}
+.footer-nav a:hover{color:var(--gold)}
+
+/* 앵커 광고 */
+.anchor-ad{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  background:var(--white);border-top:2px solid var(--cream-dark);
+  padding:8px 8px 6px;text-align:center;
+  box-shadow:0 -4px 20px rgba(0,0,0,.08);
+}
+.anchor-close{
+  position:absolute;top:4px;right:4px;
+  width:24px;height:24px;border-radius:50%;
+  background:var(--cream-dark);color:var(--muted);
+  font-size:14px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  border:none;cursor:pointer;
+}
+@media (min-width:768px){ .anchor-ad{display:none} }
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="inner">
+    <a href="/" class="logo">🍪 칸쵸 이름 찾기</a>
+    <nav class="page-nav" aria-label="페이지 내비게이션">
+      <a href="/">홈</a>
+      <a href="/event-guide.html" class="current">이벤트 가이드</a>
+      <a href="/name-stats.html">이름 통계</a>
+      <a href="/faq.html">FAQ</a>
+      <a href="/about.html">소개</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+<article>
+
+<h1>칸쵸 "내 이름을 찾아라" 이벤트 참여 가이드</h1>
+<p class="lead">
+  롯데웰푸드 칸쵸의 인기 시즌 캠페인 <strong>"내 이름을 찾아라"</strong>를 처음 접하시는 분들을 위해,
+  1탄·2탄 차이부터 응모 방법, 자주 하는 실수, 팁까지 한 페이지에 정리했습니다.
+  이 글을 따라 읽으면 누구나 쉽게 응모할 수 있어요.
+</p>
+
+<div class="ad-slot ad-managed" data-ad-place="top" aria-label="광고"></div>
+
+<h2>📌 이벤트 한눈에 보기</h2>
+<p>
+  칸쵸 "내 이름을 찾아라"는 칸쵸 패키지 뒷면에 인쇄된 다양한 한국식 이름들 사이에서
+  본인 또는 가족·친구의 이름을 찾으면 응모할 수 있는 <strong>이름 인증 캠페인</strong>입니다.
+  롯데웰푸드는 매 시즌 인쇄되는 이름 풀(pool)을 새로 구성하여, 더 많은 사람들이 자신의 이름을
+  찾을 수 있도록 시리즈로 운영하고 있어요.
+</p>
+<p>
+  현재 진행 중인 시즌은 <strong>2탄(550개 이름)</strong>이며, 직전 시즌인 1탄에는 504개의 이름이 인쇄되어
+  많은 분들이 참여했습니다. 이름 풀이 매번 바뀌기 때문에, <em>1탄에서 자신의 이름을 찾지 못한 분</em>도
+  2탄에서 새로 등재됐을 가능성이 있어요.
+</p>
+
+<h2>🆚 1탄 vs 2탄 비교</h2>
+<table>
+  <thead>
+    <tr><th>구분</th><th>1탄</th><th>2탄 (진행 중)</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>이름 수</td><td>504개</td><td>550개</td></tr>
+    <tr><td>운영 기간</td><td>2025년 가을 ~ 2026년 봄</td><td>2026년 4월 27일 ~ 6월 7일</td></tr>
+    <tr><td>패키지 표시</td><td>"이름찾기 1탄"</td><td>"이름찾기 2탄"</td></tr>
+    <tr><td>겹치는 이름</td><td colspan="2" style="text-align:center">일부 겹치지만 절반 이상은 새 이름</td></tr>
+  </tbody>
+</table>
+<p class="callout">
+  ⚠ <strong>구매 전 패키지 표기 확인</strong>이 가장 중요해요. 같은 칸쵸라도 1탄/2탄/일반 버전이
+  매대에 섞여 있을 수 있으니, 응모 가능 시즌이 맞는지 꼭 확인하세요.
+</p>
+
+<h2>📝 단계별 응모 방법</h2>
+<ol class="steps">
+  <li><strong>이름찾기 시즌 칸쵸 구매하기.</strong> 마트, 편의점, 온라인몰 등에서 패키지 앞면이나 띠지에 "내 이름을 찾아라" 또는 "이름찾기 N탄"이 적힌 제품을 구매합니다.</li>
+  <li><strong>패키지 뒷면 이름 리스트 확인.</strong> 봉투 뒷면 또는 안쪽에 인쇄된 이름 목록을 살펴보고, 본인 이름이 있는지 확인합니다. 같은 이름이 여러 칸에 인쇄되어 있을 수 있어요.</li>
+  <li><strong>공식 응모 페이지 접속.</strong> 패키지에 안내된 QR코드 또는 응모 URL(<a href="https://www.kancho-name-event.co.kr/" target="_blank" rel="noopener">www.kancho-name-event.co.kr</a>)로 접속합니다.</li>
+  <li><strong>이름 입력 후 응모.</strong> 이름과 연락처 등 응모 정보를 입력하고, 인증 사진(패키지 + 이름이 보이는 부분)을 첨부합니다.</li>
+  <li><strong>당첨자 발표 대기.</strong> 발표일에 당첨자에게 개별 안내가 가며, 경품은 등록한 주소로 발송됩니다.</li>
+</ol>
+
+<div class="ad-slot ad-managed" data-ad-place="midList" aria-label="광고"></div>
+
+<h2>🎁 경품 종류</h2>
+<p>
+  경품 구성은 시즌마다 달라지지만, 보통 다음과 같은 라인업으로 구성됩니다.
+  당첨자 수와 발표 일정은 공식 페이지에서 다시 한 번 확인해 주세요.
+</p>
+<ul>
+  <li><strong>대상</strong> — 가전제품, 여행 상품권 등 고가 경품 (소수)</li>
+  <li><strong>금상</strong> — 디지털 기기, 백화점 상품권 (수십 명)</li>
+  <li><strong>은상·동상</strong> — 칸쵸 1년치, 굿즈 패키지 (수백 명)</li>
+  <li><strong>참여상</strong> — 카카오톡 이모티콘, 모바일 쿠폰 (다수)</li>
+</ul>
+<a class="cta-card" href="https://www.kancho-name-event.co.kr/" target="_blank" rel="noopener">
+  🎯 공식 이벤트 페이지에서 응모하기
+  <span class="small">정확한 경품·발표 일정은 공식 페이지에서 확인하세요</span>
+</a>
+
+<h2>❌ 자주 하는 실수 5가지</h2>
+<ol>
+  <li><strong>구버전 패키지로 응모</strong> — 1탄 패키지로 2탄 이벤트에 응모하면 자동 탈락됩니다. 패키지 표기를 반드시 확인하세요.</li>
+  <li><strong>인증 사진 누락</strong> — 이름이 인쇄된 부분과 패키지 전체가 함께 보이는 사진을 첨부해야 합니다. 이름만 클로즈업하면 거절될 수 있어요.</li>
+  <li><strong>중복 응모</strong> — 같은 이름·전화번호로 여러 번 응모하면 1건만 유효 처리됩니다. 가족 명의로 여러 번 도전해도 OK.</li>
+  <li><strong>오타·띄어쓰기</strong> — 이름 입력 시 띄어쓰기, 한자 표기, 영문 표기는 자동 거절될 수 있습니다. 패키지에 인쇄된 형태 그대로 입력하세요.</li>
+  <li><strong>마감일 임박 시도</strong> — 마지막 날에 트래픽이 몰려 접속이 어려울 수 있어요. 여유 있게 응모하는 걸 추천합니다.</li>
+</ol>
+
+<h2>💡 당첨 확률을 높이는 팁</h2>
+<div class="callout tip">
+  <strong>TIP 1.</strong> 가족 단위로 함께 도전하세요. 1탄·2탄 이름이 다르므로,
+  본인은 1탄, 자녀는 2탄에 있을 수 있어요. 우리 사이트 검색창에 이름을 입력하면
+  어느 시즌에 있는지 즉시 확인할 수 있습니다.
+</div>
+<div class="callout tip">
+  <strong>TIP 2.</strong> 흔하지 않은 한자 이름이라도 한글 발음이 같으면 응모 가능한 경우가 많아요.
+  예를 들어 "준영"이 패키지에 있다면 "俊英", "俊永" 모두 본인 이름으로 인정될 수 있습니다.
+</div>
+<div class="callout tip">
+  <strong>TIP 3.</strong> 인증 사진은 자연광에서 정면으로 찍어주세요. 어둡거나 흔들린 사진은
+  검수에서 반려될 수 있습니다.
+</div>
+
+<h2>🔍 내 이름이 있는지 먼저 확인하세요</h2>
+<p>
+  칸쵸를 사기 전에 본인 이름이 1탄·2탄 어디에 있는지 미리 알 수 있다면 시간을 아낄 수 있겠죠.
+  저희 사이트의 검색 도구를 이용하면 이름 한 번 입력으로 1탄·2탄 동시 확인이 가능합니다.
+</p>
+<a class="cta-card" href="/">
+  🍪 내 이름 검색하러 가기
+  <span class="small">1탄·2탄 502+550 이름을 한 번에 검색</span>
+</a>
+
+<h2>📅 마무리 — 놓치지 마세요</h2>
+<p>
+  2탄 응모 마감은 <strong>2026년 6월 7일</strong>입니다. 마감일이 다가올수록 인증 사진 검수가
+  지연되거나, 트래픽이 몰려 응모 페이지가 느려질 수 있어요. 칸쵸를 미리 사두고,
+  여유 있게 응모하시는 걸 추천드립니다.
+</p>
+<p>
+  본 페이지는 비공식 팬 사이트의 정보 정리이며, 실제 응모와 경품 안내는 반드시
+  <a href="https://www.lottewellfood.com" target="_blank" rel="noopener">롯데웰푸드 공식 홈페이지</a>와
+  <a href="https://www.kancho-name-event.co.kr/" target="_blank" rel="noopener">공식 이벤트 페이지</a>를 확인해 주세요.
+</p>
+
+</article>
+</main>
+
+<footer class="page-footer">
+  <div class="inner">
+    <p>본 사이트는 비공식 팬 사이트로, 롯데웰푸드와 무관합니다.</p>
+    <nav class="footer-nav" aria-label="푸터 내비게이션">
+      <a href="/">홈</a> ·
+      <a href="/event-guide.html">이벤트 가이드</a> ·
+      <a href="/name-stats.html">이름 통계</a> ·
+      <a href="/faq.html">FAQ</a> ·
+      <a href="/about.html">소개</a> ·
+      <a href="/privacy.html">개인정보처리방침</a>
+    </nav>
+  </div>
+</footer>
+
+<div class="anchor-ad" id="anchorAd">
+  <button class="anchor-close" id="anchorClose" aria-label="광고 닫기">×</button>
+  <div class="ad-slot ad-managed" data-ad-place="anchor" aria-label="앵커 광고"></div>
+</div>
+
+<script>
+document.getElementById("anchorClose").addEventListener("click", () => {
+  document.getElementById("anchorAd").style.display = "none";
+  document.body.style.paddingBottom = "0";
+});
+</script>
+
+</body>
+</html>
