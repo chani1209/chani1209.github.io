@@ -37,8 +37,8 @@
 
 - 모든 페이지는 `AD_CONFIG`를 통해 AdSense 우선, AdFit 폴백 구조를 공유합니다.
 - 현재 `AD_CONFIG.adsense.enabled`는 `false`라 AdFit이 우선 렌더링됩니다. AdSense 승인 후 `true`로 바꾸고 슬롯 ID를 채우면 됩니다.
-- 메인 페이지 구매 버튼은 쿠팡 파트너스 링크(`https://link.coupang.com/a/eA8l43`)로 연결됩니다.
-- 구매 안내 영역에는 쿠팡 파트너스 필수 고지 문구와 제공된 iframe 광고가 함께 들어 있습니다.
+- 메인 페이지 구매 영역에는 카카오톡 선물하기 링크(`https://kko.to/7A-2-pxGCG`)와 쿠팡 파트너스 링크(`https://link.coupang.com/a/eA8l43`)가 함께 있습니다.
+- 쿠팡 구매 안내 영역에는 쿠팡 파트너스 필수 고지 문구와 제공된 iframe 광고가 함께 들어 있습니다.
 
 ## 배포 흐름
 
